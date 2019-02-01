@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require "dotenv"
+require "chess_boy"
+
+Dotenv.load("discord.env")
+Dotenv.load("lichess.env")
+
+
+discord_bot = Discordrb::Bot.new(
+  token: ENV["DISCORD_TOKEN"],
+  client_id: ENV["DISCORD_CLIENT_ID"]
+)
+
+lichess = Lichess::Client.new(ENV["LICHESS_TOKEN"])
+
+client = ChessBoy::Client.new(discord_bot, lichess)
+client.run

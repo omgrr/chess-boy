@@ -1,0 +1,10 @@
+ping:
+  method: ping
+  args: timestamp
+  filter_type: start_with
+  filter_word: ping
+stats:
+  method: stats
+  args: content
+  filter_type: start_with
+  filter_word: stats

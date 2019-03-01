@@ -1,10 +1,6 @@
 require "spec_helper"
 
 describe ChessBoy::Client do
-  describe "#initialize" do
-
-  end
-
   describe "load_event_handlers!" do
     it "loads the routes from a yaml file" do
       discord_bot = Discordrb::Bot.new(token: "dummy", client_id: "dummy")

@@ -9,7 +9,9 @@ require "chess_boy"
 Dotenv.load("discord.env")
 Dotenv.load("lichess.env")
 
-users = YAML.load(File.read("config/users.yaml"))["users"]
+user_config = YAML.load(File.read("config/users.yaml"))
+users = user_config["users"]
+discord_mappings = user_config["discord_mappings"]
 routes = YAML.load(File.read("config/event_handlers.yaml"))
 
 discord_bot = Discordrb::Bot.new(
@@ -19,6 +21,6 @@ discord_bot = Discordrb::Bot.new(
 lichess = Lichess::Client.new(ENV["LICHESS_TOKEN"])
 
 
-client = ChessBoy::Client.new(discord_bot, lichess, routes, users)
+client = ChessBoy::Client.new(discord_bot, lichess, routes, users, discord_mappings)
 client.load_event_handlers!
 client.run

@@ -2,3 +2,8 @@ users:
   - bigswifty
   - farnswurth
   - omgrr
+
+discord_mappings:
+  "@bigswifty": bigswifty
+  "@farnsworth": farnswurth
+  "@omgrr": omgrr

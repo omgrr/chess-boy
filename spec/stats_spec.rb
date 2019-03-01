@@ -49,6 +49,20 @@ describe ChessBoy::Stats do
 
       expect(stats_message).to eq("The user #{user} does not exist")
     end
+
+    it "can use the discord mapping for getting a user's stats" do
+      boy = DummyBoy.new
+
+      stats_message = boy.stats("!stats <@199424442017775619>")
+
+      expect(stats_message).to_not be_nil
+      expect(stats_message).to match(/\sblitz\s+|\s?\d{4}/)
+      expect(stats_message).to match(/\sbullet\s+|\s?\d{4}/)
+      expect(stats_message).to match(/\scorrespondence\s+|\s?\d{4}/)
+      expect(stats_message).to match(/\spuzzle\s+|\s?\d{4}/)
+      expect(stats_message).to match(/\sclassical\s+|\s?\d{4}/)
+      expect(stats_message).to match(/\srapid\s+|\s?\d{4}/)
+    end
   end
 
   describe "#rank" do

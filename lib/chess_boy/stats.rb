@@ -5,6 +5,11 @@ module ChessBoy
       user = tokens[1]
       type = tokens[2]
 
+      if user =~ /^\<\@/
+        user_id = user[/\<\@\d+\>/][/\d+/]
+        user = @discord_bot.users[user_id.to_i].username
+      end
+
       begin
         response = @lichess_client.users.get(user)
       rescue Lichess::Exception::UserNotFound
@@ -21,11 +26,11 @@ module ChessBoy
       return "Don't know of any type #{type}" if type && perfs[type].nil?
 
       table = Terminal::Table.new do |t|
-        t << ["Game Type", "Games", "Rating"]
+        t << ["Game Type", "Games", "Rating", "Progression"]
         t.add_separator
 
         perfs.each do |key, value|
-          t << [key, value["games"], value["rating"]]
+          t << [key, value["games"], value["rating"], value["prog"]]
         end
       end
 

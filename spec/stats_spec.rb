@@ -50,4 +50,52 @@ describe ChessBoy::Stats do
       expect(stats_message).to eq("The user #{user} does not exist")
     end
   end
+
+  describe "#rank" do
+    it "ranks everyone for the given stat" do
+      boy = DummyBoy.new
+
+      rank_message = boy.rank("!rank blitz")
+      expect(rank_message).to include("omgrr")
+      expect(rank_message).to include("bigswifty")
+      expect(rank_message).to include("farnswurth")
+    end
+
+    it "sorts the rankings by the given stat" do
+      boy = DummyBoy.new
+
+      expect(boy.lichess_client.users).to receive("get").with("omgrr").and_return(
+        {"id" => "omgrr", "perfs" => {"blitz" => {"games"=>1, "rating"=> 3, "prog"=>-34} } }
+      )
+
+      expect(boy.lichess_client.users).to receive("get").with("bigswifty").and_return(
+        {"id" => "bigswifty", "perfs" => {"blitz" => {"games"=>1, "rating"=> 2, "prog"=>-34} } }
+      )
+
+      expect(boy.lichess_client.users).to receive("get").with("farnswurth").and_return(
+        {"id" => "farnswurth", "perfs" => {"blitz" => {"games"=>1, "rating"=> 1, "prog"=>-34} } }
+      )
+
+      rank_message = boy.rank("!rank blitz")
+
+      rank_lines = rank_message.split("\n")
+      expect(rank_lines[4]).to include("omgrr")
+      expect(rank_lines[5]).to include("bigswifty")
+      expect(rank_lines[6]).to include("farnswurth")
+    end
+
+    it "returns an error if the requested game type doesn't exist" do
+      boy = DummyBoy.new
+
+      rank_message = boy.rank("!rank foobar")
+      expect(rank_message).to eq("The game type 'foobar' does not exist")
+    end
+
+    it "returns an error if there is no requested type" do
+      boy = DummyBoy.new
+
+      rank_message = boy.rank("!rank")
+      expect(rank_message).to eq("You must request a game type")
+    end
+  end
 end

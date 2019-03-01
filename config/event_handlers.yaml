@@ -1,10 +1,15 @@
 ping:
-  method: ping
+  route: ping
   args: timestamp
   filter_type: start_with
   filter_word: ping
 stats:
-  method: stats
+  route: stats
   args: content
   filter_type: start_with
   filter_word: stats
+rank:
+  route: rank
+  args: content
+  filter_type: start_with
+  filter_word: rank

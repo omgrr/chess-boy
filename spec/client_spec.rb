@@ -11,7 +11,7 @@ describe ChessBoy::Client do
       lichess_client = double()
       event = double()
 
-
+      users = YAML.load(File.read("config/users.yaml"))["users"]
       event_handlers = YAML.load(File.read("config/test_handlers.yaml"))
       time_stamp = Time.now
 
@@ -21,7 +21,13 @@ describe ChessBoy::Client do
         block.call(event)
       end
 
-      client = ChessBoy::Client.new(discord_bot, lichess_client, event_handlers)
+      client = ChessBoy::Client.new(
+        discord_bot,
+        lichess_client,
+        event_handlers,
+        users
+      )
+
       expect(client).to receive(:public_send).with(:ping, time_stamp).and_return("Pong")
 
       client.load_event_handlers!

@@ -23,8 +23,9 @@ class DummyBoy
       token: ENV["DISCORD_TOKEN"],
       client_id: ENV["DISCORD_CLIENT_ID"],
     )
+  end
 
+  def run_discord_bot
     @discord_bot.run(:async)
   end
 end
-

@@ -52,6 +52,7 @@ describe ChessBoy::Stats do
 
     it "can use the discord mapping for getting a user's stats" do
       boy = DummyBoy.new
+      boy.run_discord_bot
 
       stats_message = boy.stats("!stats <@199424442017775619>")
 

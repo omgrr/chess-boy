@@ -18,7 +18,6 @@ module ChessBoy
       @event_handlers.each do |event_name, event|
         filter = {}
         filter[event["filter_type"].to_sym] = "!#{event["filter_word"]}"
-
         puts "#{event_name} #{event}"
 
         @discord_bot.message(filter) do |discord_event|

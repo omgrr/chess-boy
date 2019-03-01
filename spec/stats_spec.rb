@@ -54,6 +54,8 @@ describe ChessBoy::Stats do
       boy = DummyBoy.new
       boy.run_discord_bot
 
+      expect(boy.lichess_client.users).to receive(:get).with("farnswurth").and_call_original
+
       stats_message = boy.stats("!stats <@199424442017775619>")
 
       expect(stats_message).to_not be_nil

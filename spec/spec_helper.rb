@@ -17,7 +17,7 @@ class DummyBoy
     @lichess_client = Lichess::Client.new(ENV["LICHESS_TOKEN"])
     @users = ["bigswifty", "omgrr", "farnswurth"]
     @discord_mappings = {
-      "@farnsworth" => "farnsworth"
+      "Farnsworth" => "farnswurth"
     }
     @discord_bot = Discordrb::Bot.new(
       token: ENV["DISCORD_TOKEN"],

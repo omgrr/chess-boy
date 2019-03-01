@@ -7,7 +7,9 @@ module ChessBoy
 
       if user =~ /^\<\@/
         user_id = user[/\<\@\d+\>/][/\d+/]
-        user = @discord_bot.users[user_id.to_i].username
+        discord_username = @discord_bot.users[user_id.to_i].username
+
+        user = @discord_mappings[discord_username]
       end
 
       begin

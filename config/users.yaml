@@ -4,6 +4,6 @@ users:
   - omgrr
 
 discord_mappings:
-  "@bigswifty": bigswifty
-  "@farnsworth": farnswurth
-  "@omgrr": omgrr
+  "bigswifty": bigswifty
+  "Farnsworth": farnswurth
+  "omgrr": omgrr

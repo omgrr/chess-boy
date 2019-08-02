@@ -1,5 +1,8 @@
 module ChessBoy
   module Stats
+
+    SCOREBOARD_GAME_TYPE_TRACKING = ["bullet", "blitz", "rapid", "puzzle"]
+
     def stats(message_content)
       tokens = message_content.split(" ")
       user = tokens[1]
@@ -42,20 +45,13 @@ module ChessBoy
     def rank(message_content)
       tokens = message_content.split(" ")
       type = tokens[1]
+      all_stats = []
 
       return "You must request a game type" if type.nil?
+      return "The game type 'foobar' does not exist" unless ChessBoy::GAME_TYPES.include?(type)
 
-      all_stats = []
-      @users.each do |user|
-        user_info = @lichess_client.users.get(user)
-
-        user_stats = {}
-
-        return "The game type '#{type}' does not exist" if user_info["perfs"][type].nil?
-        user_stats = user_info["perfs"][type]
-        user_stats["user"] = user
-
-        all_stats << user_stats
+      _get_user_info.each do |user_info|
+        all_stats << _parse_user_info_for_type(user_info, type)
       end
 
       all_stats.sort_by! { |stat| stat["rating"] }.reverse!
@@ -70,6 +66,55 @@ module ChessBoy
       end
 
       return "```\n#{table.to_s}\n```"
+    end
+
+    def scoreboard(_message_content)
+      all_stats = {}
+
+      _get_user_info.each do |user_info|
+        SCOREBOARD_GAME_TYPE_TRACKING.each do |type|
+          all_stats[type] ||= []
+          all_stats[type] << _parse_user_info_for_type(user_info, type)
+        end
+      end
+
+      SCOREBOARD_GAME_TYPE_TRACKING.each do |type|
+        all_stats[type].sort_by! { |stat| stat["rating"] }.reverse!
+      end
+
+      table = Terminal::Table.new(title: "SCOREBOARD", headings: SCOREBOARD_GAME_TYPE_TRACKING) do |t|
+        @users.length.times do |i|
+          row = []
+          SCOREBOARD_GAME_TYPE_TRACKING.each do |type|
+            user_stat = all_stats[type][i]
+            row << "#{user_stat["user"]}: #{user_stat["rating"]}"
+          end
+
+          t << row
+        end
+      end
+
+      table.columns.length.times do |i|
+        table.align_column(i, :right)
+      end
+
+      return "```\n#{table.to_s}```"
+    end
+
+    private
+
+    def _get_user_info
+      @users.map { |user| @lichess_client.users.get(user) }
+    end
+
+    def _parse_user_info_for_type(user_info, type)
+      user_stats = {}
+
+      return "The game type '#{type}' does not exist" if user_info["perfs"][type].nil?
+      user_stats = user_info["perfs"][type]
+      user_stats["user"] = user_info["id"]
+
+      user_stats
     end
   end
 end

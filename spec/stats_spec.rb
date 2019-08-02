@@ -115,4 +115,51 @@ describe ChessBoy::Stats do
       expect(rank_message).to eq("You must request a game type")
     end
   end
+
+  describe "#scoreboard" do
+    it "Ranks all of the users for bullet, rapid, blitz, and puzzle" do
+      boy = DummyBoy.new
+
+      expect(boy.lichess_client.users).to receive("get").with("omgrr").and_return(
+      {
+        "id" => "omgrr", "perfs" => {
+          "bullet" => {"games"=>1, "rating"=> 3, "prog"=>-34},
+          "blitz" => {"games"=>1, "rating"=> 2, "prog"=>-34},
+          "rapid" => {"games"=>1, "rating"=> 1, "prog"=>-34},
+          "puzzle" => {"games"=>1, "rating"=> 3, "prog"=>-34},
+        }
+      })
+
+      expect(boy.lichess_client.users).to receive("get").with("bigswifty").and_return({
+        "id" => "bigswifty", "perfs" => {
+          "bullet" => {"games"=>1, "rating"=> 1, "prog"=>-34},
+          "blitz" => {"games"=>1, "rating"=> 3, "prog"=>-34},
+          "rapid" => {"games"=>1, "rating"=> 2, "prog"=>-34},
+          "puzzle" => {"games"=>1, "rating"=> 2, "prog"=>-34},
+        }
+      })
+
+      expect(boy.lichess_client.users).to receive("get").with("farnswurth").and_return({
+        "id" => "farnswurth", "perfs" => {
+          "bullet" => {"games"=>1, "rating"=> 2, "prog"=>-34},
+          "blitz" => {"games"=>1, "rating"=> 1, "prog"=>-34},
+          "rapid" => {"games"=>1, "rating"=> 3, "prog"=>-34},
+          "puzzle" => {"games"=>1, "rating"=> 1, "prog"=>-34},
+        }
+      })
+
+      scoreboard_message = boy.scoreboard("!scoreboard")
+      message_lines = scoreboard_message.split("\n")
+
+      expect(message_lines[2]).to include("SCOREBOARD")
+      expect(message_lines[4]).to include("bullet")
+      expect(message_lines[4]).to include("blitz")
+      expect(message_lines[4]).to include("rapid")
+      expect(message_lines[4]).to include("puzzle")
+
+      expect(message_lines[6]).to match(/omgrr.+bigswifty.+farnswurth.+omgrr/)
+      expect(message_lines[7]).to match(/farnswurth.+omgrr.+bigswifty.+bigswifty/)
+      expect(message_lines[8]).to match(/bigswifty.+farnswurth.+omgrr.+farnswurth/)
+    end
+  end
 end

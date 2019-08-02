@@ -13,3 +13,8 @@ rank:
   args: content
   filter_type: start_with
   filter_word: rank
+scoreboard:
+  route: scoreboard
+  args: content
+  filter_type: start_with
+  filter_word: scoreboard

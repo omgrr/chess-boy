@@ -14,7 +14,7 @@ class DummyBoy
   def initialize
     Dotenv.load("discord.env")
 
-    @lichess_client = Lichess::Client.new(ENV["LICHESS_TOKEN"])
+    @lichess_client = Lichess::Client.new(ENV["LICHESS_TOKEN"], logger: Logger.new(StringIO.new))
     @users = ["bigswifty", "omgrr", "farnswurth"]
     @discord_mappings = {
       "Farnsworth" => "farnswurth"

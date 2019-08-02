@@ -15,7 +15,7 @@ module ChessBoy
     end
 
     def load_event_handlers!
-      puts "Loading event handlers"
+      @logger.info "Loading event handlers"
       @event_handlers.each do |event_name, event|
         filter = {}
         filter[event["filter_type"].to_sym] = "!#{event["filter_word"]}"
@@ -25,7 +25,7 @@ module ChessBoy
           value = discord_event.public_send(event["args"].to_sym)
           message = self.public_send(event["route"].to_sym, value)
 
-          @logger.info("Event route: #{event["route"]}, Event arguments: #{event["args"]}")
+          @logger.info "Event route: #{event["route"]}, Event arguments: #{event["args"]}"
 
           discord_event.respond(message)
         end

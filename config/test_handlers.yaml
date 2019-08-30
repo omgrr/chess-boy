@@ -3,3 +3,8 @@ ping:
   args: timestamp
   filter_type: start_with
   filter_word: ping
+scoreboard:
+  route: scoreboard
+  args: content
+  filter_type: start_with
+  filter_word: scoreboard

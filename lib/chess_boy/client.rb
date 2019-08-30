@@ -27,7 +27,12 @@ module ChessBoy
 
           @logger.info "Event route: #{event["route"]}, Event arguments: #{event["args"]}"
 
-          discord_event.respond(message)
+          if message.is_a?(Image)
+            file = message.write!
+            discord_event.send_file(file)
+          else
+            discord_event.respond(message)
+          end
         end
       end
     end

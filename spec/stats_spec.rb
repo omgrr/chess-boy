@@ -72,7 +72,9 @@ describe ChessBoy::Stats do
     it "ranks everyone for the given stat" do
       boy = DummyBoy.new
 
-      rank_message = boy.rank("!rank blitz")
+      rank_image = boy.rank("!rank blitz")
+      rank_message = rank_image.text
+
       expect(rank_message).to include("omgrr")
       expect(rank_message).to include("bigswifty")
       expect(rank_message).to include("farnswurth")
@@ -93,18 +95,20 @@ describe ChessBoy::Stats do
         {"id" => "farnswurth", "perfs" => {"blitz" => {"games"=>1, "rating"=> 1, "prog"=>-34} } }
       )
 
-      rank_message = boy.rank("!rank blitz")
+      rank_image = boy.rank("!rank blitz")
+      rank_message = rank_image.text
 
       rank_lines = rank_message.split("\n")
-      expect(rank_lines[4]).to include("omgrr")
-      expect(rank_lines[5]).to include("bigswifty")
-      expect(rank_lines[6]).to include("farnswurth")
+      expect(rank_lines[3]).to include("omgrr")
+      expect(rank_lines[4]).to include("bigswifty")
+      expect(rank_lines[5]).to include("farnswurth")
     end
 
     it "returns an error if the requested game type doesn't exist" do
       boy = DummyBoy.new
 
       rank_message = boy.rank("!rank foobar")
+
       expect(rank_message).to eq("The game type 'foobar' does not exist")
     end
 
@@ -112,12 +116,13 @@ describe ChessBoy::Stats do
       boy = DummyBoy.new
 
       rank_message = boy.rank("!rank")
+
       expect(rank_message).to eq("You must request a game type")
     end
   end
 
   describe "#scoreboard" do
-    it "Ranks all of the users for bullet, rapid, blitz, and puzzle" do
+    it "Returns an Image with the Ranks of all the users for bullet, rapid, blitz, and puzzle" do
       boy = DummyBoy.new
 
       expect(boy.lichess_client.users).to receive("get").with("omgrr").and_return(
@@ -148,18 +153,22 @@ describe ChessBoy::Stats do
         }
       })
 
-      scoreboard_message = boy.scoreboard("!scoreboard")
-      message_lines = scoreboard_message.split("\n")
+      scoreboard_image = boy.scoreboard("!scoreboard")
+      message_lines = scoreboard_image.text.split("\n")
 
-      expect(message_lines[2]).to include("SCOREBOARD")
-      expect(message_lines[4]).to include("bullet")
-      expect(message_lines[4]).to include("blitz")
-      expect(message_lines[4]).to include("rapid")
-      expect(message_lines[4]).to include("puzzle")
+      expect(scoreboard_image).to be_a(ChessBoy::Image)
+      expect(scoreboard_image.location).to eq("scoreboard.jpg")
 
-      expect(message_lines[6]).to match(/omgrr.+bigswifty.+farnswurth.+omgrr/)
-      expect(message_lines[7]).to match(/farnswurth.+omgrr.+bigswifty.+bigswifty/)
-      expect(message_lines[8]).to match(/bigswifty.+farnswurth.+omgrr.+farnswurth/)
+
+      expect(message_lines[1]).to include("SCOREBOARD")
+      expect(message_lines[3]).to include("bullet")
+      expect(message_lines[3]).to include("blitz")
+      expect(message_lines[3]).to include("rapid")
+      expect(message_lines[3]).to include("puzzle")
+
+      expect(message_lines[5]).to match(/omgrr.+bigswifty.+farnswurth.+omgrr/)
+      expect(message_lines[6]).to match(/farnswurth.+omgrr.+bigswifty.+bigswifty/)
+      expect(message_lines[7]).to match(/bigswifty.+farnswurth.+omgrr.+farnswurth/)
     end
   end
 end

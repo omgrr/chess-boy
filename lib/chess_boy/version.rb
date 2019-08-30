@@ -1,5 +1,3 @@
-module Chess
-  module Boy
-    VERSION = "0.1.0"
-  end
+module ChessBoy
+  VERSION = "0.2.0"
 end

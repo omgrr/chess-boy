@@ -9,7 +9,7 @@ task :default => :spec
 
 task :release do
   image = `docker build .`.split("\n").last.split.last
-  puts `docker tag #{image} registry.heroku.com/chess-boy/worker:latest`
-  puts `docker push registry.heroku.com/chess-boy/worker:latest`
+  puts `docker tag #{image} registry.heroku.com/chess-boy/worker:#{ChessBoy::VERSION}`
+  puts `docker push registry.heroku.com/chess-boy/worker:#{ChessBoy::VERSION}`
   puts `heroku container:release worker`
 end

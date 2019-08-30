@@ -2,6 +2,8 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require "bundler/setup"
+require "yaml"
+require "dotenv"
 require "chess_boy"
 
 # You can add fixtures and/or initialization code here to make experimenting

@@ -3,6 +3,7 @@ require "lichess"
 require "terminal-table"
 
 require "chess_boy/basics"
+require "chess_boy/image"
 require "chess_boy/stats"
 require "chess_boy/version"
 

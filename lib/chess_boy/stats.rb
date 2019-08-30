@@ -31,7 +31,7 @@ module ChessBoy
       return "Don't know of any type #{type}" if type && perfs[type].nil?
 
       table = Terminal::Table.new do |t|
-        t << ["Game Type", "Games", "Rating", "Progression"]
+        t << ["Game Type", "Games", "Rating", "Prog"]
         t.add_separator
 
         perfs.each do |key, value|
@@ -57,7 +57,7 @@ module ChessBoy
       all_stats.sort_by! { |stat| stat["rating"] }.reverse!
 
       table = Terminal::Table.new do |t|
-        t << ["User", "Rating", "Games", "Progression"]
+        t << ["User", "Rating", "Games", "Prog"]
         t.add_separator
 
         all_stats.each do |value|
@@ -65,7 +65,7 @@ module ChessBoy
         end
       end
 
-      return "```\n#{table.to_s}\n```"
+      Image.new(table.to_s, "scoreboard.jpg")
     end
 
     def scoreboard(_message_content)
@@ -98,7 +98,7 @@ module ChessBoy
         table.align_column(i, :right)
       end
 
-      return "```\n#{table.to_s}```"
+      Image.new(table.to_s, "scoreboard.jpg")
     end
 
     private

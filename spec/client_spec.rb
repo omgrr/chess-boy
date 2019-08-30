@@ -29,4 +29,30 @@ describe ChessBoy::Client do
       client.load_event_handlers!
     end
   end
+
+  describe "#initialize" do
+    it "the logger defaults to STDOUT if nil" do
+      users = YAML.load(File.read("config/users.yaml"))["users"]
+      event_handlers = YAML.load(File.read("config/test_handlers.yaml"))
+
+      stringio = StringIO.new
+      STDOUT = stringio
+
+      discord_bot = Discordrb::Bot.new(token: "dummy", client_id: "dummy")
+      lichess_client = double()
+      event = double()
+
+      client = ChessBoy::Client.new(
+        discord_bot,
+        lichess_client,
+        event_handlers,
+        users
+      )
+
+      client.logger.info("hello world")
+
+      expect(stringio.string).to match(/hello world/)
+      expect(stringio.string).to match(/INFO/)
+    end
+  end
 end

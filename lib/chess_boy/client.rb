@@ -5,9 +5,16 @@ module ChessBoy
 
     attr_reader :discord_bot, :lichess_client, :event_handlers, :logger
 
-    def initialize(discord_bot, lichess_client, event_handlers, users, discord_mappings = nil, logger = STDOUT)
+    def initialize(discord_bot, lichess_client, event_handlers, users, discord_mappings = nil, logger = nil)
       @discord_bot = discord_bot
-      @logger = Logger.new(logger)
+
+      if logger
+        @logger = Logger.new(logger)
+      else
+        STDOUT.sync = true
+        @logger = Logger.new(STDOUT)
+      end
+
       @lichess_client = Lichess::Client.new(ENV["LICHESS_TOKEN"], logger: @logger)
       @event_handlers = event_handlers
       @users = users

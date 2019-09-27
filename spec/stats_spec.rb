@@ -81,16 +81,14 @@ describe ChessBoy::Stats do
     it "sorts the rankings by the given stat" do
       boy = DummyBoy.new
 
-      expect(boy.lichess_client.users).to receive("get").with("omgrr").and_return(
-        {"id" => "omgrr", "perfs" => {"blitz" => {"games"=>1, "rating"=> 3, "prog"=>-34} } }
-      )
-
-      expect(boy.lichess_client.users).to receive("get").with("bigswifty").and_return(
-        {"id" => "bigswifty", "perfs" => {"blitz" => {"games"=>1, "rating"=> 2, "prog"=>-34} } }
-      )
-
-      expect(boy.lichess_client.users).to receive("get").with("farnswurth").and_return(
-        {"id" => "farnswurth", "perfs" => {"blitz" => {"games"=>1, "rating"=> 1, "prog"=>-34} } }
+      expect(boy.lichess_client.users).to receive("get")
+        .with(["bigswifty", "omgrr", "farnswurth"])
+        .and_return(
+        [
+          {"id" => "omgrr", "perfs" => {"blitz" => {"games"=>1, "rating"=> 3, "prog"=>-34}}},
+          {"id" => "bigswifty", "perfs" => {"blitz" => {"games"=>1, "rating"=> 2, "prog"=>-34}}},
+          {"id" => "farnswurth", "perfs" => {"blitz" => {"games"=>1, "rating"=> 1, "prog"=>-34}}},
+        ]
       )
 
       rank_message = boy.rank("!rank blitz")
@@ -120,33 +118,36 @@ describe ChessBoy::Stats do
     it "Ranks all of the users for bullet, rapid, blitz, and puzzle" do
       boy = DummyBoy.new
 
-      expect(boy.lichess_client.users).to receive("get").with("omgrr").and_return(
-      {
-        "id" => "omgrr", "perfs" => {
-          "bullet" => {"games"=>1, "rating"=> 3, "prog"=>-34},
-          "blitz" => {"games"=>1, "rating"=> 2, "prog"=>-34},
-          "rapid" => {"games"=>1, "rating"=> 1, "prog"=>-34},
-          "puzzle" => {"games"=>1, "rating"=> 3, "prog"=>-34},
-        }
-      })
-
-      expect(boy.lichess_client.users).to receive("get").with("bigswifty").and_return({
-        "id" => "bigswifty", "perfs" => {
-          "bullet" => {"games"=>1, "rating"=> 1, "prog"=>-34},
-          "blitz" => {"games"=>1, "rating"=> 3, "prog"=>-34},
-          "rapid" => {"games"=>1, "rating"=> 2, "prog"=>-34},
-          "puzzle" => {"games"=>1, "rating"=> 2, "prog"=>-34},
-        }
-      })
-
-      expect(boy.lichess_client.users).to receive("get").with("farnswurth").and_return({
-        "id" => "farnswurth", "perfs" => {
-          "bullet" => {"games"=>1, "rating"=> 2, "prog"=>-34},
-          "blitz" => {"games"=>1, "rating"=> 1, "prog"=>-34},
-          "rapid" => {"games"=>1, "rating"=> 3, "prog"=>-34},
-          "puzzle" => {"games"=>1, "rating"=> 1, "prog"=>-34},
-        }
-      })
+      expect(boy.lichess_client.users).to receive("get")
+        .with(["bigswifty", "omgrr", "farnswurth"])
+        .and_return(
+        [
+          {
+            "id" => "omgrr", "perfs" => {
+              "bullet" => {"games"=>1, "rating"=> 3, "prog"=>-34},
+              "blitz" => {"games"=>1, "rating"=> 2, "prog"=>-34},
+              "rapid" => {"games"=>1, "rating"=> 1, "prog"=>-34},
+              "puzzle" => {"games"=>1, "rating"=> 3, "prog"=>-34},
+            }
+          },
+          {
+            "id" => "bigswifty", "perfs" => {
+              "bullet" => {"games"=>1, "rating"=> 1, "prog"=>-34},
+              "blitz" => {"games"=>1, "rating"=> 3, "prog"=>-34},
+              "rapid" => {"games"=>1, "rating"=> 2, "prog"=>-34},
+              "puzzle" => {"games"=>1, "rating"=> 2, "prog"=>-34},
+            }
+          },
+          {
+          "id" => "farnswurth", "perfs" => {
+            "bullet" => {"games"=>1, "rating"=> 2, "prog"=>-34},
+            "blitz" => {"games"=>1, "rating"=> 1, "prog"=>-34},
+            "rapid" => {"games"=>1, "rating"=> 3, "prog"=>-34},
+            "puzzle" => {"games"=>1, "rating"=> 1, "prog"=>-34},
+            }
+          }
+        ]
+      )
 
       scoreboard_message = boy.scoreboard("!scoreboard")
       message_lines = scoreboard_message.split("\n")

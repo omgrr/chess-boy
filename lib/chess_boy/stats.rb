@@ -104,7 +104,7 @@ module ChessBoy
     private
 
     def _get_user_info
-      @users.map { |user| @lichess_client.users.get(user) }
+      @lichess_client.users.get(@users)
     end
 
     def _parse_user_info_for_type(user_info, type)
